@@ -82,6 +82,40 @@
             alert("A margem deve ser maior que 0");
             return;
         }
+
+        const medidas = {
+            comodoLargura,
+            comodoComprimento,
+            pisoLargura,
+            pisoComprimento,
+            margem
+        }
+
+        const dados = JSON.stringify(medidas);
+
+        fetch('/calculo.php', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: dados
+        })
+        .then(resposta => resposta.json())
+        .then(resultado =>{
+            let elementoResultado = document.getElementById("resultado");
+
+            //elementoResultado.innerHTML = '';
+
+            const exibir =
+            "<p> Área do comodo: " + resultado.areaComodo + " </p>" +
+            "<p> Área do piso: " + resultado.areaPiso + " </p>" +
+            "<p> Quantidade de piso: " + resultado.quantidade + " </p>" +
+            "<p> Quantidade para margem: " + resultado.quantidadeMargem + " </p>" +
+            "<p> Total a ser comprado: " + resultado.quantidadeTotal + " </p>" ;
+
+            elementoResultado.innerHTML = exibir;
+        })
+        .catch(erro => {
+            alert("Ocorreu um erro");
+        });
     }
 
 </script>
