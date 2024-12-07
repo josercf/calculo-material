@@ -8,10 +8,21 @@
 
     <style>
         #parede-espera {
-            width: 1024px;
-            height: 1024px;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
             z-index: 1000;
             background: #c3c3c3;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        #parede-espera p {
+            font-weight: bold;
         }
 
     </style>
@@ -30,12 +41,12 @@
                 <div class="col-md-6">
                     <label for="comodo-largura" class="form-label">Largura(m)</label>
                     <input type="number" class="form-control" id="comodo-largura" required>
-                    <span id="comodo-largura-validacao" class="text-danger invisible">Teste</span>
+                    <span id="comodo-largura-validacao" class="text-danger invisible"></span>
                 </div>
                 <div class="col-md-6">
                     <label for="comodo-comprimento" class="form-label">Comprimento(m)</label>
                     <input type="number" class="form-control" id="comodo-comprimento" required>
-                    <span id="comodo-comprimento-validacao" class="text-danger invisible">Teste</span>
+                    <span id="comodo-comprimento-validacao" class="text-danger invisible"></span>
                 </div>
             </fildset>
             <fildset class="row g-2">
@@ -43,18 +54,18 @@
                 <div class="col-md-6">
                     <label for="piso-largura" class="form-label">Largura(m)</label>
                     <input type="number" class="form-control" id="piso-largura" required>
-                    <span id="piso-largura-validacao" class="text-danger invisible">Teste</span>
+                    <span id="piso-largura-validacao" class="text-danger invisible"></span>
                 </div>
                 <div class="col-md-6">
                     <label for="piso-comprimento" class="form-label">Comprimento(m)</label>
                     <input type="number" class="form-control" id="piso-comprimento" required>
-                    <span id="piso-comprimento-validacao" class="text-danger invisible">Teste</span>
+                    <span id="piso-comprimento-validacao" class="text-danger invisible"></span>
                 </div>
             </fildset>
             <div class="col-md-12"> 
                 <label for="margem" class="form-label">Margem(%)</label>
                 <input type="number" class="form-control" id="margem" required>
-                <span id="margem-validacao" class="text-danger invisible">Teste</span>
+                <span id="margem-validacao" class="text-danger invisible"></span>
             </div>
             <div class="col-md-12">
                 <button class="btn btn-primary" id="btn-calcular" onclick="processar();">Calcular</button>
@@ -65,7 +76,10 @@
         </div> 
     </div>
 
-    <div id="parede-espera" class="opacity-50"/>
+    <div id="parede-espera" class="opacity-75 invisible">
+        <img src="images/carregando.gif" alt="Carregando">
+        <p>Por favor, aguarde.</p>
+    </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -87,8 +101,18 @@
         margem.addEventListener("focus", removerMensagemErro);
     }
 
+    function toggleLoading(){
+        //recuperamos a div
+        const div = document.getElementById("parede-espera");
+
+        //alternamos entre ligado e desligado
+        div.classList.toggle("invisible");
+    }
+
     function processar(){
         try {
+
+            toggleLoading();
             const comodoLargura = document.getElementById("comodo-largura").value;
             const comodoComprimento = document.getElementById("comodo-comprimento").value;
             const pisoLargura = document.getElementById("piso-largura").value;
@@ -135,7 +159,10 @@
                 headers: {'Content-Type':'application/json'},
                 body: dados
             })
-            .then(resposta => resposta.json())
+            .then(resposta => {
+                toggleLoading();
+                return resposta.json()
+            })
             .then(resultado =>{
                 let elementoResultado = document.getElementById("resultado");
 
@@ -145,8 +172,6 @@
                     resultado.erro.forEach(erroMsg => {
                         exibirErro(erroMsg.idCampo, erroMsg.mensagem);
                     });
-
-
                     return;
                 }
 
@@ -163,8 +188,7 @@
             })
             .catch(erro => {
                 alert("Ocorreu um erro");
-                console.error(erro);
-                
+                console.error(erro);                
             });
         }
         catch(e){
