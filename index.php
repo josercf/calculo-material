@@ -36,7 +36,23 @@
 
     <div class="container">
         <div class="row g-2">
-            <fildset class="row g-2">
+            <fieldset class="row g-2">
+                <legend>Identificação</legend>
+
+                <div class="col-md-6">
+                    <label for="cliente" class="form-label">Cliente</label>
+                    <input type="text" class="form-control" id="cliente" required>
+                    <span id="cliente-validacao" class="text-danger invisible"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="identificador" class="form-label">Comôdo</label>
+                    <input type="text" class="form-control" id="identificador" required>
+                    <span id="identificador-validacao" class="text-danger invisible"></span>
+                </div>
+            </fieldset>
+
+            <fieldset class="row g-2">
                 <legend>Comôdo</legend>
                 <div class="col-md-6">
                     <label for="comodo-largura" class="form-label">Largura(m)</label>
@@ -48,8 +64,8 @@
                     <input type="number" class="form-control" id="comodo-comprimento" required>
                     <span id="comodo-comprimento-validacao" class="text-danger invisible"></span>
                 </div>
-            </fildset>
-            <fildset class="row g-2">
+            </fieldset>
+            <fieldset class="row g-2">
             <legend>Piso</legend>
                 <div class="col-md-6">
                     <label for="piso-largura" class="form-label">Largura(m)</label>
@@ -61,7 +77,7 @@
                     <input type="number" class="form-control" id="piso-comprimento" required>
                     <span id="piso-comprimento-validacao" class="text-danger invisible"></span>
                 </div>
-            </fildset>
+            </fieldset>
             <div class="col-md-12"> 
                 <label for="margem" class="form-label">Margem(%)</label>
                 <input type="number" class="form-control" id="margem" required>
@@ -74,12 +90,36 @@
                 <div id="resultado"></div>
             </div>
         </div> 
+
+        <div class="row g-2" id="resultados">
+            <div id="template-card">
+                <div class="card" style="width: 18rem;" >
+                    <div class="card-body">
+                        <h5 class="card-title">José Romualdo</h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">Quarto 2</h6>
+
+                        <ul>
+                            <li>Área do comodo: 10 </li>
+                            <li>Área do piso: 10 </li>
+                            <li>Quantidade de piso: 350</li>
+                            <li>Quantidade para margem: 35 </li>
+                            <li>Total a ser comprado: 385</li>
+                        </ul>
+                                        
+                        <a href="#" class="card-link">Alterar</a>
+                        <a href="#" class="card-link">Excluir</a>
+                    </div>
+                </div>  
+            </div>   
+        </div>
     </div>
 
     <div id="parede-espera" class="opacity-75 invisible">
         <img src="images/carregando.gif" alt="Carregando">
         <p>Por favor, aguarde.</p>
     </div>
+
+    
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -88,6 +128,7 @@
     realizarBinds();
 
     function realizarBinds()    {
+        const identificador = document.getElementById("identificador");
         const comodoLargura = document.getElementById("comodo-largura");
         const comodoComprimento = document.getElementById("comodo-comprimento");
         const pisoLargura = document.getElementById("piso-largura");
@@ -109,10 +150,24 @@
         div.classList.toggle("invisible");
     }
 
+    function copiarCard(){
+        //id do componente de template
+        const idTemplate = "template-card";
+
+        //recuperamos o template de card e extraímos o html para criar uma cópia
+        const cardTemplate = document.getElementById(idTemplate);
+        var htmlCard = cardTemplate.getHTML();
+
+        //adicionamos a cópia ao container de resultados
+        const containerResultado = document.getElementById("resultados");
+        containerResultado.insertAdjacentHTML("beforeend", htmlCard)
+    }
+
     function processar(){
         try {
 
             toggleLoading();
+            const identificador = document.getElementById("identificador").value;
             const comodoLargura = document.getElementById("comodo-largura").value;
             const comodoComprimento = document.getElementById("comodo-comprimento").value;
             const pisoLargura = document.getElementById("piso-largura").value;
@@ -145,6 +200,7 @@
             // }
 
             const medidas = {
+                identificador,
                 comodoLargura,
                 comodoComprimento,
                 pisoLargura,
@@ -185,6 +241,10 @@
                 "<p> Total a ser comprado: " + resultado.quantidadeTotal + " </p>" ;
 
                 elementoResultado.innerHTML = exibir;
+
+                const jsonString = JSON.stringify(resultado);
+
+                localStorage.setItem(identificador, jsonString);
             })
             .catch(erro => {
                 alert("Ocorreu um erro");

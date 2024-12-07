@@ -12,6 +12,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     $feedback = [];
 
+    if(empty($dados->identificador)){
+        $feedback[] = [
+            "idCampo" => "identificador",
+            "mensagem" => "O nome do comôdo/calculo é obrigatório"
+        ] ;
+    }
+
     if($dados->comodoLargura <= 0){
         $feedback[] = [
             "idCampo" => "comodo-largura",
@@ -55,7 +62,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $areaPiso = $dados->pisoLargura * $dados->pisoComprimento;
 
     $quantidadePiso = $areaComodo / $areaPiso;
-    sleep(10);
+    //sleep(10);
 
     //10% = 0.1
     //100m * 0.1 = 10m
