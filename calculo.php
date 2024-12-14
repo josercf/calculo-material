@@ -12,9 +12,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     $feedback = [];
 
-    if(empty($dados->identificador)){
+    if(empty($dados->nomeComodo)){
         $feedback[] = [
-            "idCampo" => "identificador",
+            "idCampo" => "nomeComodo",
             "mensagem" => "O nome do comôdo/calculo é obrigatório"
         ] ;
     }
@@ -71,6 +71,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $quantidadeTotal = $quantidadePiso + $margem;
 
     echo json_encode([
+        "nomeCliente" => $dados->nomeCliente,
+        "nomeComodo" => $dados->nomeComodo,
         "areaComodo" => $areaComodo,
         "areaPiso" => $areaPiso,
         "quantidade" => $quantidadePiso,
