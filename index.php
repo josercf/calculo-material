@@ -91,27 +91,29 @@
             </div>
         </div> 
 
-        <div class="row g-2" id="resultados">
-            <div id="template-card">
-                <div class="card" style="width: 18rem;" >
-                    <div class="card-body">
-                        <h5 class="card-title">José Romualdo</h5>
-                        <h6 class="card-subtitle mb-2 text-body-secondary">Quarto 2</h6>
+        <div class="row" id="resultados">
 
-                        <ul>
-                            <li>Área do comodo: 10 </li>
-                            <li>Área do piso: 10 </li>
-                            <li>Quantidade de piso: 350</li>
-                            <li>Quantidade para margem: 35 </li>
-                            <li>Total a ser comprado: 385</li>
-                        </ul>
-                                        
-                        <a href="#" class="card-link">Alterar</a>
-                        <a href="#" class="card-link">Excluir</a>
-                    </div>
-                </div>  
-            </div>   
         </div>
+
+        <div id="template-card" class="invisible">
+            <div class="card me-2 mb-2" style="width: 18rem;" >
+                <div class="card-body">
+                    <h5 class="card-title">José Romualdo</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">Quarto 2</h6>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Área do comodo: 10 </li>
+                    <li class="list-group-item">Área do piso: 10 </li>
+                    <li class="list-group-item">Quantidade de piso: 350</li>
+                    <li class="list-group-item">Quantidade para margem: 35 </li>
+                    <li class="list-group-item">Total a ser comprado: 385</li>
+                </ul>
+                <div class="card-body">                    
+                    <a href="#" class="card-link">Alterar</a>
+                    <a href="#" class="card-link">Excluir</a>
+                </div>                   
+            </div>  
+        </div>   
     </div>
 
     <div id="parede-espera" class="opacity-75 invisible">
